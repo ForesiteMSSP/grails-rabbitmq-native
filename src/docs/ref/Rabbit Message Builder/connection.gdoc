@@ -1,0 +1,20 @@
+h1. connection
+
+h2. Purpose
+
+Set the name of the connection to use for the request.
+
+h2. Examples
+
+{code}
+new RabbitMessageBuilder().send {
+    routingKey = "example.queue"
+    body = "test message"
+    connection = "local"
+}
+{code}
+
+h2. Description
+
+The value of this property must match the name of a connection in the configuration.  If no connection name is given, the default connection
+will be used, if defined.  If there is no default connection, an exception will be thrown.

@@ -1,0 +1,28 @@
+h1. isDefault
+
+h2. Purpose
+
+Sets whether the connection should be considered the default connection.
+
+h2. Examples
+
+{code}
+rabbitmq {
+    connection  = {
+        connection(
+            host: "rabbit.example.com",
+            username: "foo",
+            password: "bar",
+            isDefault: true
+        )
+        connection(
+            ...
+        )
+    }
+}
+{code}
+
+h2. Description
+
+When more than one connection to a RabbitMQ broker is being used in an application, one of the connections can be configured
+as the default connection to use when messages or consumers are configured without specifying the connection name.

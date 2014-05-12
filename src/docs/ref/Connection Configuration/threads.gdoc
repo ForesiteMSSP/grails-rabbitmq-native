@@ -8,18 +8,21 @@ h2. Examples
 
 {code}
 rabbitmq {
-    connection {
-        host = "rabbit.example.com"
-        username = "foo"
-        password = "bar"
-        threads = 5
+    connection = {
+        connection(
+            host: "rabbit.example.com",
+            username: "foo",
+            password: "bar",
+            threads: 0
+        )
     }
 }
 {code}
 
 h2. Description
 
-The number of threads determines how many total concurrent consumers will be delivered and processed at a time. The default is 5 threads.
+The number of threads determines how many total concurrent consumers will be delivered and processed at a time. The default is 0,
+which uses an unlimited amount of threads as needed.
 
 {warning}
 If the total number of consumers exceeds the thread count, the number of concurrently processed messages will be limited by the
