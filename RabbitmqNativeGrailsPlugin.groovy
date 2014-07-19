@@ -33,7 +33,7 @@ class RabbitmqNativeGrailsPlugin {
     /**
      * Version of the plugin.
      */
-    def version = "1.0.3"
+    def version = "1.0.5-SNAPSHOT"
 
     /**
      * The version or versions of Grails the plugin is designed for.
@@ -117,6 +117,11 @@ class RabbitmqNativeGrailsPlugin {
      */
     def doWithSpring = {
         // Setup the rabbit context
+        
+        if (application.config.rabbitmq.enabled == false){
+            return
+        }
+        
         "rabbitContext"(RabbitContext) { bean ->
             bean.scope = 'singleton'
             bean.autowire = true
@@ -149,6 +154,10 @@ class RabbitmqNativeGrailsPlugin {
      * Application context actions.
      */
     def doWithApplicationContext = { applicationContext ->
+        if (application.config.rabbitmq.enabled == false){
+            return
+        }
+        
         restartRabbitContext(application, applicationContext.getBean('rabbitContext'))
     }
 
@@ -158,6 +167,10 @@ class RabbitmqNativeGrailsPlugin {
     def onChange = { event ->
         // Bail if no context
         if (!event.ctx) {
+            return
+        }
+        
+        if (applcation.config.rabbitmq.enabled == false){
             return
         }
 
@@ -200,6 +213,10 @@ class RabbitmqNativeGrailsPlugin {
      * Handle configuration changes.
      */
     def onConfigChange = { event ->
+        if (applcation.config.rabbitmq.enabled == false){
+            return
+        }
+        
         RabbitContext context = event.ctx.getBean('rabbitContext')
         restartRabbitContext(application, context)
         context.startConsumers()
@@ -211,6 +228,9 @@ class RabbitmqNativeGrailsPlugin {
      * @param context
      */
     void restartRabbitContext(GrailsApplication application, RabbitContext context) {
+        if (applcation.config.rabbitmq.enabled == false){
+            return
+        }
         // Stop the rabbit context
         context.stop()
 
@@ -233,6 +253,10 @@ class RabbitmqNativeGrailsPlugin {
      * @param application
      */
     void configureQueues(GrailsApplication application, RabbitContext context) {
+        if (applcation.config.rabbitmq.enabled == false){
+            return
+        }
+        
         // Skip if the config isn't defined
         if (!(application.config.rabbitmq?.queues instanceof Closure)) {
             return
@@ -257,6 +281,10 @@ class RabbitmqNativeGrailsPlugin {
      * @param context
      */
     void restartConsumers(GrailsApplication application, RabbitContext context) {
+        if (applcation.config.rabbitmq.enabled == false){
+            return
+        }
+        
         // Stop the consumers
         context.stopConsumers()
 
@@ -273,6 +301,7 @@ class RabbitmqNativeGrailsPlugin {
      * @param context
      */
     void registerConsumers(GrailsApplication application, RabbitContext context) {
+        
         application.messageConsumerClasses.each { GrailsClass clazz ->
             context.registerConsumer(clazz)
         }

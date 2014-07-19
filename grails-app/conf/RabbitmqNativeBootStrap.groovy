@@ -16,9 +16,11 @@
 import com.budjb.rabbitmq.RabbitContext
 
 class RabbitmqNativeBootStrap {
+    def grailsApplication
+    
     RabbitContext rabbitContext
 
     def init = { servletContext ->
-        rabbitContext.startConsumers()
+        rabbitContext?.startConsumers()
     }
 }
